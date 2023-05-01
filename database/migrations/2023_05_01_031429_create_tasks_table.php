@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('tasks', function (Blueprint $table) {
             // $table->id();
-            $table->increments('employee_no'); 
-            $table->string('name');
-            $table->string('department');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->bigIncrements('task_no'); 
+            $table->string('description');
+            $table->date('due_date')->useCurrent();
+            // $table->string('status');
+            $table->set('status', ['not yet started', 'in progress', 'completed','past due']);
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('tasks');
     }
 };

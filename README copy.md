@@ -1,27 +1,15 @@
-<h1 align="center">PIOJ Task Management Assessment Project</h1>
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
+<p align="center">
+<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
 
+## About Laravel
 
-## Setup
-
-This Application is a Task Management System implemented with a Laravel Backend and a React.js/Typescript Frondend. 
-
-- Install PHP Server of choice
-- install [Nodejs](https://nodejs.org/en/) and [PHP Composer](https://getcomposer.org/download/) from official websites.
-- Install [laravel](https://laravel.com/docs/) project on PHP Server.
-- Install Reactjs/Typescript via [Vite](https://vitejs.dev/guide/) within laravel project folder.
-- Install [laravel Sanctum](https://laravel.com/docs/10.x/starter-kits#laravel-breeze) User Authentication, proprietor(Laravel) recommended for SPA (single page applications). Scaffold using Laravel Breeze.
-- Add  **SESSION_DOMAIN=localhost** and **SANCTUM_STATEFUL_DOMAINS=localhost** to .env file 
-- Create DATABASE model using a many to many relations between employees and task.
-
-### Notes 
-
-- trigger git local account authentication: 
-    - git config user.name your_username
-    - git config user.email your_email
-    - git config --local credential.helper ""
-
-<br>
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
 - [Simple, fast routing engine](https://laravel.com/docs/routing).
 - [Powerful dependency injection container](https://laravel.com/docs/container).
