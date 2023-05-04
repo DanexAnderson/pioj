@@ -15,10 +15,21 @@ const Dashboard =()=> {
     return <Navigate to="/login"/>
   }
 
- 
+  const onLogout = async (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    // const csrf = () =>
+  
+   await Axios.post('/logout')
+      .then(() => {
+        setUser({})
+        setToken(null)
+        navigate("/login",{ replace: true });
+      })
+  }
 
     return (
         <div>
+            <Button  onClick={onLogout} >Log out</Button>
             <h1>Hello Again from Dashboard !!</h1>
         </div>
     )

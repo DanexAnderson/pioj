@@ -1,5 +1,5 @@
 import { lazy, Suspense  } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 // Dynamic (Lazy Loaded) Imports
 const Dashboard = lazy(() => import('../Dashboard'));
@@ -27,7 +27,7 @@ const Login = lazy(() => import('../Login'));
                 element={ <Suspense fallback={<>...</>} ><Login /> </Suspense> }/>
 
 
-        <Route path="*" element={<Dashboard />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
 
     </Routes>
 

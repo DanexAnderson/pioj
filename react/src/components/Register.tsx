@@ -3,24 +3,71 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useState } from 'react';
+import Axios from './Util/Axios';
+import {Errors} from './Util/interface';
+import { useStateContext } from './Util/contentProvider';
+import { useNavigate } from 'react-router-dom';
+import CircularProgress from '@mui/material/CircularProgress';
+import { Link } from "react-router-dom";
+import Card from '@mui/material/Card';
 
-import axios from 'axios';
-
-interface Errors {
-  employee_no:string, name:string, email:string, password:string,
-   password_confirmation:string,department: string,
-}
 
 export default function SignUp() {
 
   const [errors, setErrors] = useState<Errors>();
+  const {setUser, setToken, token} = useStateContext()
+  const navigate = useNavigate();
+  const [spinner, setSpinner] = useState<boolean>();
+
+
+  const csrf = () => Axios.get('/sanctum/csrf-cookie');
+
+  const register = async (payload:{}) => {
+
+    if(token){
+
+      await Axios.post('/logout')
+        .then(() => {
+          setUser({})
+          setToken(null)
+          
+        })
+      }
+
+    await csrf();
+
+     await Axios.post('/register' , payload)
+    .then(({data}) => {
+   
+           console.log('this is data: ', data);
+
+           setUser(data.user)
+           setToken(data.token);
+           setSpinner(false);
+           navigate("/",{ replace: true });
+
+       })
+       .catch(err => {
+
+         console.log('this is top level error: ', err)
+         const response = err.response;
+         setSpinner(false);
+
+         if (response && response.status === 422) {
+
+           setErrors(response.data.errors)
+
+           console.log('this is error: ', response.data.errors)
+         }
+       })
+
+  }
 
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -37,43 +84,28 @@ export default function SignUp() {
       password_confirmation: data.get('password_confirmation'),
     }
 
-     axios.defaults.withCredentials = true;
-     axios.get('http://localhost:8000' + '/sanctum/csrf-cookie');
-     axios.post('http://localhost:8000/register' , payload)
-     .then(({data}) => {
-    
-            console.log('this is data: ', data);
+    setSpinner(true);
 
-            // Add Router Navigation to Registration and login page
-            // generate session token
-
-        })
-        .catch(err => {
-          console.log('this is top error: ', err)
-          const response = err.response;
-          if (response && response.status === 422) {
-            setErrors(response.data.errors)
-            console.log('this is error: ', response.data.errors)
-          }
-        })
+    register(payload);
+     
 
   };
 
-  
 
   return (
   
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="sm">
+         <Card sx={{  p:5, mt:10, width:'100%' }} >
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 0,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ mb: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
           <br/>
@@ -82,7 +114,7 @@ export default function SignUp() {
           </Typography>
           <br/>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} >
               <Grid item xs={12} sm={4}>
                 <TextField
                   autoComplete="given-name"
@@ -170,7 +202,7 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link to="/login" style={{color:'blue',}} >
                   Already have an account? Sign in
                 </Link>
               </Grid>
@@ -178,6 +210,9 @@ export default function SignUp() {
           </Box>
         </Box>
        
+        { spinner && <Box sx={{ display: 'flex', justifyContent:'center', mt:3, mb:7 }}>
+          <CircularProgress color="primary"  size="4rem" thickness={3} /></Box>}
+      </Card>
       </Container>
   
   );

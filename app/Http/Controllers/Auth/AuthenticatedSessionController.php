@@ -8,18 +8,26 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
+
 class AuthenticatedSessionController extends Controller
 {
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): Response
+   
+    public function store(LoginRequest $request)
     {
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        return response()->noContent();
+         /** @var \App\Models\User $user */
+
+         $user = Auth::user();
+         
+         $token = $user->createToken('user_token', ['server:update'])->plainTextToken;
+
+        return response(compact('user', 'token'));
     }
 
     /**
@@ -33,6 +41,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return response()->noContent();
+         return response('', 204);
     }
 }
